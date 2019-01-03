@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sunflower.dao.MetadataDao">
+
+
+
+    <select id="initBanner" resultType="java.util.Map" >
+        select banner_url
+        from ba_banner
+    </select>
+
+    <select id="get_aboutus" resultType="java.util.Map" >
+        select content
+        from ba_aboutus limit 1
+    </select>
+
+    <select id="initCompanyNewsList" resultType="java.util.Map" >
+        select id,title,url,date
+        from ba_company_news
+    </select>
+
+    <select id="initFriendLinks" resultType="java.util.Map" >
+        select title,url
+        from ba_friend_link
+    </select>
+
+
+    <select id="companyIntroduction" resultType="java.util.Map" >
+        select content
+        from ba_company_intro limit 1
+    </select>
+
+    <select id="brandBuild" resultType="java.util.Map" >
+        select content
+        from ba_brand_build limit 1
+    </select>
+
+    <select id="get_scba" resultType="java.util.Map" >
+        select title,content
+        from ba_scba
+    </select>
+
+    <select id="get_sqba" resultType="java.util.Map" >
+        select title,content
+        from ba_sqba
+    </select>
+    <select id="gettraining" resultType="java.util.Map" >
+        select content
+        from ba_train
+    </select>
+
+    <select id="companyCulture" resultType="java.util.Map" >
+        select content
+        from ba_company_culture
+    </select>
+
+    <select id="companyFiles" resultType="java.util.Map" >
+        select content
+        from ba_company_file
+    </select>
+    <select id="initCompanyContent" resultType="java.util.Map" parameterType="java.lang.String">
+        select content
+        from ba_company_news where id = #{0}
+    </select>
+
+
+
+
+    <select id="initList" resultType="java.util.Map" parameterType="java.util.Map">
+    select student_Id,
+      ifnull(student_name,'') as student_name ,
+      ifnull(student_nick_name ,'') as student_nick_name,
+      ifnull(birth_day ,'') as birth_day,
+      ifnull(age_now ,'') as age_now,
+      ifnull(school_class,'') as school_class,
+      ifnull(parent_name_1,'') as parent_name_1,
+      ifnull(parent_phone_1,'') as parent_phone_1,
+      ifnull(parent_name_2,'') as parent_name_2,
+      ifnull(parent_phone_2,'') as parent_phone_2,
+      ifnull(channel,'') as channel,
+      ifnull(student_desc,'') as student_desc
+      from student_info
+    where 1 = 1
+    <if test="student_name_search != ''">
+      and (student_name like CONCAT('%', #{student_name_search},'%' )  or student_nick_name like CONCAT('%', #{student_name_search},'%' ))
+    </if>
+      order by student_Id
+      limit #{start},10
+
+  </select>
+
+    <select id="totalCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(1)
+        from student_info
+        where 1 = 1
+        <if test="student_name_search != ''">
+            and (student_name like CONCAT('%', #{student_name_search},'%' )  or student_nick_name like CONCAT('%', #{student_name_search},'%' ))
+        </if>
+    </select>
+
+
+    <select id="student_count" resultType="java.lang.Integer">
+        select count(1)
+        from student_info
+    </select>
+
+    <select id="student_class_count" resultType="java.lang.Integer">
+        select count(1)
+        from student_class_info
+    </select>
+
+    <select id="term_week" resultType="java.lang.Integer">
+        select week
+        from term_info where state = '1'
+    </select>
+
+    <select id="class_count" resultType="java.lang.Integer">
+        select count(1)
+        from class_info
+    </select>
+    <select id="pre_student_count" resultType="java.lang.Integer">
+        select count(1)
+        from reserver_info where state = '0'
+    </select>
+
+    <select id="birthday_student" resultType="java.lang.String" parameterType="java.lang.String">
+        select concat(student_name," ",birth_day)
+        from student_info where  SUBSTR(birth_day,5,6) >=  SUBSTR(#{0},5,6) order by SUBSTR(birth_day,5,6) limit 3
+    </select>
+
+    <insert id="save_companyIntroduction" parameterType="java.lang.String">
+        delete from ba_company_intro;
+        insert into ba_company_intro (content) values (#{content});
+    </insert>
+
+    <insert id="save_companyCulture" parameterType="java.lang.String">
+        delete from ba_company_culture;
+        insert into ba_company_culture (content) values (#{content});
+    </insert>
+    <insert id="save_companyFiles" parameterType="java.lang.String">
+        delete from ba_company_file;
+        insert into ba_company_file (content) values (#{content});
+    </insert>
+
+    <insert id="save_brandBuild" parameterType="java.lang.String">
+        delete from ba_brand_build;
+        insert into ba_brand_build (content) values (#{content});
+    </insert>
+
+    <insert id="save_trainning" parameterType="java.lang.String">
+        delete from ba_train;
+        insert into ba_train (content) values (#{content});
+    </insert>
+
+    <insert id="save_aboutus" parameterType="java.lang.String">
+        delete from ba_aboutus;
+        insert into ba_aboutus (content) values (#{content});
+    </insert>
+
+    <insert id="save_scba" parameterType="java.lang.String">
+        delete from ba_scba;
+        insert into ba_scba (content) values (#{content});
+    </insert>
+
+    <insert id="save_sqba" parameterType="java.lang.String">
+        delete from ba_sqba;
+        insert into ba_sqba (content) values (#{content});
+    </insert>
+
+    <delete id="delete_new" parameterType="java.lang.String">
+        delete from ba_company_news where id = #{id}
+    </delete>
+
+
+    <insert id="save_new" parameterType="java.lang.String">
+
+        insert into ba_company_news(title,content,date,id,url) values (#{0},#{1},#{2},#{3},concat('/sunflower/metadata/new.do?id=',#{3}))
+    </insert>
+</mapper>

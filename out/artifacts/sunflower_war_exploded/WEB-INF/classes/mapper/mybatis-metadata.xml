@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sunflower.dao.MetadataDao">
+
+  <select id="initList" resultType="java.util.Map" parameterType="java.util.Map">
+    select student_Id,
+      ifnull(student_name,'') as student_name ,
+      ifnull(student_nick_name ,'') as student_nick_name,
+      ifnull(birth_day ,'') as birth_day,
+      ifnull(age_now ,'') as age_now,
+      ifnull(school_class,'') as school_class,
+      ifnull(parent_name_1,'') as parent_name_1,
+      ifnull(parent_phone_1,'') as parent_phone_1,
+      ifnull(parent_name_2,'') as parent_name_2,
+      ifnull(parent_phone_2,'') as parent_phone_2,
+      ifnull(channel,'') as channel,
+      ifnull(student_desc,'') as student_desc
+      from student_info
+    where 1 = 1
+    <if test="student_name_search != ''">
+      and (student_name like CONCAT('%', #{student_name_search},'%' )  or student_nick_name like CONCAT('%', #{student_name_search},'%' ))
+    </if>
+      order by student_Id
+      limit #{start},10
+
+  </select>
+
+    <select id="totalCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(1)
+        from student_info
+        where 1 = 1
+        <if test="student_name_search != ''">
+            and (student_name like CONCAT('%', #{student_name_search},'%' )  or student_nick_name like CONCAT('%', #{student_name_search},'%' ))
+        </if>
+    </select>
+
+
+    <select id="student_count" resultType="java.lang.Integer">
+        select count(1)
+        from student_info
+    </select>
+
+    <select id="student_class_count" resultType="java.lang.Integer">
+        select count(1)
+        from student_class_info
+    </select>
+
+    <select id="term_week" resultType="java.lang.Integer">
+        select week
+        from term_info where state = '1'
+    </select>
+
+    <select id="class_count" resultType="java.lang.Integer">
+        select count(1)
+        from class_info
+    </select>
+    <select id="pre_student_count" resultType="java.lang.Integer">
+        select count(1)
+        from reserver_info where state = '0'
+    </select>
+
+    <select id="birthday_student" resultType="java.lang.String" parameterType="java.lang.String">
+        select concat(student_name," ",birth_day)
+        from student_info where  SUBSTR(birth_day,5,6) >=  SUBSTR(#{0},5,6) order by SUBSTR(birth_day,5,6) limit 3
+    </select>
+
+
+
+</mapper>

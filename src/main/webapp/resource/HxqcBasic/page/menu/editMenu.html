@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>菜单管理</title>
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="renderer" content="webkit">
+<script src="../../js/jquery.js"></script>
+<script src="../../js/underscore-min.js"></script>
+<script src="../../js/bootstrap/js/bootstrap.js"></script>
+<link href="../../js/bootstrap/css/bootstrap.css" rel="stylesheet">
+<link href="../../js/bootstrap/css/font-awesome.css" rel="stylesheet">
+<link rel="stylesheet" href="../../css/MyCss.css" />
+<script src="../../js/DataTables/js/jquery.dataTables.hxqc.js"></script>
+<link href="../../js/DataTables/css/dataTables.bootstrap.css"
+	rel="stylesheet">
+<script src="../../js/DataTables/js/dataTables.bootstrap.js"></script>
+<!--自定义样式 及 公共js--->
+<link href="../../css/public.css" rel="stylesheet">
+<script src="../../js/public.js"></script>
+<body>
+	<!--内容页开始 -->
+	<div class="container-fluid">
+
+		<!--表单框架-->
+		<form class="form-horizontal" id="test">
+			<input type="hidden" name="right_id" id="right_id">
+			<div class="form_area">
+				<div class="form_head">
+					<div class="row">
+						<div class="col-sm-9">
+							<span class="title">编辑菜单</span>
+						</div>
+						<div class="col-sm-3"></div>
+					</div>
+				</div>
+				<!--表格体-->
+				<div class="form_body"
+					style="padding: 15px 10px; margin-left: 100px;">
+					<p class="bg-warning" id="msg"
+						style="height: 40px; line-height: 40px; color: red; text-align: center; display: none;"></p>
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="form-group">
+								<div class="input-group">
+									<div class="row">
+										<div class="form-group">
+											<div class="input-group">
+												<label class="input-group-addon"><span
+													style="color: red;">*</span>菜单名称:</label> <input
+													style="width: 300px;" class="form-control" type="text"
+													title="请输入菜单名称" id="right_name" placeholder="请输入菜单名称">
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="form-group">
+											<div class="input-group">
+												<label class="input-group-addon"><span
+													style="color: red;">*</span>菜单地址:</label> <input
+													style="width: 300px;" class="form-control" type="text"
+													title="请输入菜单地址" id="access_value" placeholder="请输入菜单地址">
+
+
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="form-group">
+											<div class="input-group">
+												<label class="input-group-addon"><span
+													style="color: red; visibility: hidden;">*</span>图标样式:</label> <input
+													style="width: 300px;" class="form-control" type="text"
+													id="right_icon" placeholder="如：icon-laptop">
+
+
+											</div>
+										</div>
+									</div>
+
+
+									<div class="row">
+										<div class="form-group">
+											<div class="input-group">
+												<label class="input-group-addon"><span
+													style="color: red;">*</span>排&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;序:</label>
+												<input class="form-control" type="text" title="请输入数字"
+													style="width: 300px;" id="sort_id" placeholder="请输入数字" />
+											</div>
+										</div>
+									</div>
+
+
+									<div class="row">
+										<div class="form-group">
+											<div class="input-group">
+												<label class="input-group-addon"><span
+													style="color: red;">*</span>菜单级别:</label> <select id="parent_id"
+													style="width: 300px;" class="form-control">
+													<option value="0">顶级菜单</option>
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="row" id="type_div" style="display: none;">
+										<div class="form-group">
+											<div class="input-group">
+												<label class="input-group-addon" ><span
+													style="color: red;">*</span>菜单类型:</label>
+													 <select id="access_type"  style="height: 38px;width: 300px;" 
+													class="form-control">
+													<option value="1">菜单</option>
+													<option value="2">按钮</option>
+												</select>
+												
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="form-group">
+											<div class="input-group">
+												<label class="input-group-addon"><span
+													style="color: red;">*</span>状&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;态:</label>
+												<label style="height: 38px; width: 300px; text-align: left;"
+													class="input-group-addon"> <input type="radio"
+													name="status" checked="checked" value="1">启用 <input
+													type="radio" name="status" value="0"> 停用
+												</label>
+											</div>
+										</div>
+									</div>
+
+									<div class="row" style="text-align: center; padding-top: 10px">
+										<label class="input-group-btn">
+											<button type="button" class="btn btn-primary" id="add_btn"
+												style="width: 120px; margin-left: 80px">提交</button>
+											<button type="button" class="btn btn-default"
+												onclick="history.go(-1);"
+												style="width: 120px; margin-left: 30px">返回</button>
+										</label>
+									</div>
+
+								</div>
+							</div>
+
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<!--内容页结束-->
+	<script>
+		$(document).ready(
+				function() {
+
+					var right_id = location.GetQueryString("right_id");
+					$.get(GLOBAL.ctx + '/menu/find', {
+						right_id : right_id
+					}, function(right) {
+						Init(right);
+					}, "json");
+
+					var Init = function(menu) {
+						$("#right_id").val(menu.right_id);
+						$("#right_name").val(menu.right_name);
+						$("#access_value").val(menu.access_value);
+						$("#right_icon").val(menu.right_icon);
+						$("#sort_id").val(menu.sort_id);
+						$("input[name=status][value=" + menu.status + "]")
+								.attr("checked", true);
+
+						$.post(GLOBAL.ctx + '/menu/findRights', {
+							status : "1",
+							access_type : "0"
+						}, function(rights) {
+							for (var i = 0; i < rights.length; i++) {
+								$(
+										"<option value='"+ rights[i].right_id + "'  >"
+												+ rights[i].right_name
+												+ "</option>").appendTo(
+										$("#parent_id"));
+
+							}
+							if ($("#parent_id").find(
+									"option[value='" + menu.parent_id + "']")
+									.attr("value") == undefined) {
+								$("#parent_id").append(
+										"<option value='"+menu.parent_id+"'  >"
+												+ menu.parent_name
+												+ "</option>");
+							}
+							$("#parent_id").val(menu.parent_id);
+						}, "json");
+						$("#access_type").val(menu.access_type);
+						if(menu.access_type!='0'){
+							$("#type_div").show();
+						}else{
+							$("#type_div").hide();
+						}
+					}
+
+					var timeout;
+					function showMsg(msg) {
+						$("#msg").html(msg);
+						$("#msg").show();
+						if (timeout != undefined)
+							clearTimeout(timeout);
+						timeout = setTimeout(function hiddenMsg() {
+							$("#msg").html("");
+							$("#msg").hide();
+						}, 5000);
+					}
+
+					$("#add_btn").click(
+							function() {
+								var right_id = $("#right_id").val();
+								var right_name = $("#right_name").val();
+								var access_value = $("#access_value").val();
+								var access_type = $("#access_type").val();
+								var parent_id = $("#parent_id").val();
+								var sort_id = $("#sort_id").val();
+								var right_icon = $("#right_icon").val();
+								var status = $('input[name="status"]:checked ')
+										.val();
+
+								if (right_name.length<2||right_name.length>50) {
+									showMsg("请输入2-50位长度的菜单名称!");
+									$("#right_name").focus();
+									return;
+								}
+								if (access_value == ""
+										|| access_value.length > 255) {
+									showMsg("菜单地址不能为空且不超过255个字符!");
+									$("#access_value").focus();
+									return;
+								}
+								if (!_.isNumber(parseInt(sort_id))) {
+									showMsg("排序值必须为6位以下数字!");
+									$("#sort_id").focus();
+									return;
+								}
+
+								$.post(GLOBAL.ctx + "/menu/editMenu", {
+									"right_id" : right_id,
+									"right_name" : right_name,
+									"access_value" : access_value,
+									"parent_id" : parent_id,
+									"sort_id" : sort_id,
+									"status" : status,
+									"right_icon" : right_icon,
+									"access_type" : access_type
+								}, function(data) {
+									if (data.optFlag == 'Y') {
+										alert("修改成功!");
+										location.href = GLOBAL.ctx
+												+ "/page/menu/menu.html";
+									} else {
+										showMsg(data.optDesc);
+									}
+								}, "json");
+
+							});
+					$("#parent_id").change(function(){
+						if(this.value!='0'){
+							$("#type_div").show();
+						}else{
+							$("#type_div").hide();
+						}
+					});
+				});
+	</script>
+</body>
+</html>

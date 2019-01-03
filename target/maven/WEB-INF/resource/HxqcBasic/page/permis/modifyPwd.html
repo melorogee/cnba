@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="renderer" content="webkit">
+<script src="../../js/jquery.js"></script>
+<script src="../../js/bootstrap/js/bootstrap.js"></script>
+<link href="../../js/bootstrap/css/bootstrap.css" rel="stylesheet">
+<link href="../../js/bootstrap/css/font-awesome.css" rel="stylesheet">
+<link rel="stylesheet" href="../../css/MyCss.css" />
+<script src="../../js/DataTables/js/jquery.dataTables.js"></script>
+<link href="../../js/DataTables/css/dataTables.bootstrap.css"
+	rel="stylesheet">
+<script src="../../js/DataTables/js/dataTables.bootstrap.js"></script>
+<!--自定义样式 及 公共js--->
+<link href="../../css/public.css" rel="stylesheet">
+<script src="../../js/public.js"></script>
+<script src="../../js/valid.js"></script>
+<style type="text/css">
+.form-control {
+	border-left-style: solid;
+	border-left-width: 1px;
+	border-left-color: #cccccc;
+}
+</style>
+</head>
+<script type="text/javascript">
+	function check() {
+		var a = document.getElementById("old_pwd").value;
+		var b = document.getElementById("password").value;
+		var c = document.getElementById("new_pwd").value;
+		if (a == null || a == '') {
+			$("#errorinfo").html("*旧密码不能为空");
+			$("#errorinfo").show();
+			return;
+		} else if (null == b || b == "") {
+			$("#errorinfo").html("*新密码不能为空");
+			$("#errorinfo").show();
+			return;
+		}
+		if (a == b) {
+			$("#errorinfo").html("*新的密码不能和旧密码相同");
+			$("#errorinfo").show();
+			return;
+		}
+		if (b != c) {
+			$("#errorinfo").html("*两次输入的新密码不一致");
+			$("#errorinfo").show();
+			return;
+		}
+		login();
+	}
+
+	function login() {
+		$.ajax({
+			type : "POST",
+			url : GLOBAL.ctx + "/sys/modifyPwd",
+			dataType : "json",
+			data : {
+				"old_pwd" : $("#old_pwd").val(),
+				"password" : $("#password").val()
+			},
+			success : function(data) {
+				console.log(data);
+				if (data.optFlag == "Y") {
+					alert("密码修改成功,请重新登录!");
+					parent.location.href = GLOBAL.ctx + '/sys/logout';
+				} else {
+					$("#errorinfo").html(data.optDesc);
+					$("#errorinfo").show();
+				}
+			}
+		});
+
+	}
+
+	function cleantip() {
+		$("#errorinfo").hide();
+	}
+</script>
+</head>
+<body>
+	<!--内容页开始 -->
+	<div class="container-fluid">
+
+		<!--表单框架-->
+		<form class="form-horizontal" id="test">
+			<div class="form_area">
+				<div class="form_head">
+					<div class="row">
+						<div class="col-sm-9">
+							<span class="title">修改密码</span>
+						</div>
+						<div class="col-sm-3"></div>
+					</div>
+				</div>
+				<!--表格体-->
+				<div class="form_body"
+					style="padding: 15px 10px; margin-left: 100px;">
+					<div class="container">
+						<div class="row">
+
+							<div class="col-lg-9 col-xs-9" style="margin: 50px auto;">
+								<div class="row">
+									<div class="col-md-9">
+										<div class="login">
+											<div style="margin: auto; padding: 20px 40px;">
+
+												<div class="row">
+													<div class="col-xs-9">
+														<div class="form-group">
+															<div class="input-group">
+																<span class="input-group-addon"><span
+																	class="glyphicon glyphicon-user"></span> </span> <input
+																	type="password" name="old_pwd" class="form-control"
+																	id="old_pwd" onfocus="cleantip()" placeholder="旧密码">
+
+															</div>
+
+														</div>
+													</div>
+													<div class="col-xs-9">
+														<div class="form-group">
+															<div class="input-group">
+																<span class="input-group-addon"><span
+																	class="glyphicon glyphicon-lock"></span> </span> <input
+																	type="password" name="password" class="form-control"
+																	id="password" onfocus="cleantip()" placeholder="新密码">
+
+															</div>
+
+														</div>
+													</div>
+													<div class="col-xs-9">
+														<div class="form-group">
+															<div class="input-group">
+																<span class="input-group-addon"><span
+																	class="glyphicon glyphicon-lock"></span> </span> <input
+																	type="password" id="new_pwd" name="new_pwd"
+																	class="form-control" id="re_pwd" placeholder="再次输入新密码"
+																	onfocus="cleantip()">
+
+															</div>
+														</div>
+													</div>
+
+													<div align="left" style="color: red; line-height: 30px;"
+														class="col-xs-12">
+														<i style="display: none" id="errorinfo"></i>
+													</div>
+
+													<div class="col-xs-4"
+														style="padding-top: 10px; text-align: center;">
+														<button type="button" class="btn btn-primary" id="add_btn"
+															style="width: 120px; margin-left: 80px"
+															onclick="check();">确定</button>
+
+													</div>
+													<div class="col-xs-4"
+														style="padding-top: 10px; text-align: center;">
+														<button type="button" class="btn btn-default"
+															onclick="document.forms[0].reset();"
+															style="width: 120px; margin-left: 30px">重置</button>
+
+													</div>
+												</div>
+
+											</div>
+										</div>
+
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sunflower.dao.StudentDao">
+
+    <select id="getStudentBaseInfo" resultType="map" parameterType="java.lang.String">
+       SELECT
+			student_id,
+			student_name,
+			student_nick_name,
+			birth_day,
+			join_time
+		FROM
+			student_info
+		WHERE
+			student_id = #{0}
+    </select>
+
+
+    <select id="getStudentClassInfo" resultType="map" parameterType="java.lang.String">
+       select t2.student_Id,t2.student_name,t1.class_sub_type,t.left_class from student_class_info t
+		left join class_info t1 on t.class_id = t1.class_id
+		left join student_info t2 on t.student_id = t2.student_Id
+		WHERE
+			t.student_id = #{0}
+    </select>
+
+
+    <select id="selectGlobalAccessToken" resultType="map">
+       select token,time from wx_token order by time desc
+    </select>
+
+    <insert id="updateGlobalAccessToken" parameterType="java.lang.String">
+      insert into wx_token values (#{0},#{1})
+    </insert>
+
+
+    <select id="selectJsapiTicket" resultType="map">
+       select ticket,time from wx_ticket order by time desc
+    </select>
+
+
+    <insert id="updateJsapiTicket" parameterType="java.lang.String">
+      insert into wx_ticket values (#{0},#{1})
+    </insert>
+
+
+    <select id="getStudentIdByName" resultType="java.lang.Integer">
+      select student_id from student_info where student_name = #{0}
+    </select>
+
+
+    <select id="getTecherList" resultType="java.lang.String">
+      select teacher from class_info group by teacher
+    </select>
+
+    <select id="getTecherClassList" resultType="java.lang.String" parameterType="java.lang.String">
+      select class_id from class_info where teacher = #{0}
+    </select>
+
+    <select id="getTecherClassStudentList" resultType="map" parameterType="java.lang.String">
+      SELECT
+            student_name,
+            goon,
+         update_time,
+         left_class
+        FROM
+            student_class_info
+        WHERE
+            class_id = #{0}
+
+   </select>
+
+
+</mapper>

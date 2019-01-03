@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="renderer" content="webkit">
+<script src="../../js/jquery.js"></script>
+<script src="../../js/bootstrap/js/bootstrap.js"></script>
+<link href="../../js/bootstrap/css/bootstrap.css" rel="stylesheet">
+<link href="../../js/bootstrap/css/font-awesome.css" rel="stylesheet">
+<link rel="stylesheet" href="../../css/MyCss.css" />
+<script src="../../js/DataTables/js/jquery.dataTables.min.hxqc.js"></script>
+<link href="../../js/DataTables/css/dataTables.bootstrap.css"
+	rel="stylesheet">
+<script src="../../js/DataTables/js/dataTables.bootstrap.js"></script>
+<!--自定义样式 及 公共js--->
+<link href="../../css/public.css" rel="stylesheet">
+<script src="../../js/public.js"></script>
+<link href="../../js/select2/select2.min.css" rel="stylesheet">
+<script src="../../js/select2/select2.full.min.js"></script>
+<script src="js/valid.js"></script>
+<script src="js/admin.js"></script>
+
+</head>
+
+<body>
+	<!--内容页开始 -->
+	<div class="container-fluid">
+
+		<!--表单框架-->
+		<div class="form_area">
+			<div class="form_head">
+				<div class="row">
+					<div class="col-sm-9">
+						<span class="title">管理员维护</span>
+					</div>
+					<div class="col-sm-3"></div>
+				</div>
+			</div>
+			<!--表格体-->
+			<div class="form_body padding_top">
+				<div class="row" style="margin-top: 5px;">
+					<div class="col-sm-4 col-lg-3">
+						<div class="form-group">
+							<div class="input-group">
+								<label class="input-group-addon">搜索条件：</label> <select
+									style="height: 32px;" name="condition.search_key"
+									id="search_key" class="form-control">
+									<option value="user_id">用户帐号</option>
+									<option value="user_name">用户名称</option>
+									<option value="phone">手机号码</option>
+									<option value="user_title">用户职称</option>
+								</select>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-sm-5 col-lg-3">
+						<div class="form-group">
+							<div class="input-group">
+								<label class="input-group-addon">搜索关键字：</label> <input
+									type="text" class="form-control check_input" id="search_value"
+									name="condition.search_value" placeholder="用户名称/用户名/手机号码/邮箱"
+									value="" title="用户名称/用户名/手机号码/邮箱">
+							</div>
+						</div>
+					</div>
+
+					<div class="col-sm-4 col-lg-3">
+						<div class="form-group">
+							<div class="input-group">
+								<label class="input-group-addon">所属部门：</label> <select
+									name="dept_id" id="department" class="form-control">
+									<option value="">用户部门</option>
+								</select>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-sm-4 col-lg-2">
+						<div class="form-group">
+							<div class="input-group">
+								<label class="input-group-addon"><font color="red"
+									style="visibility: hidden;">*</font>用户状态：</label> <select
+									name="user_status" id="user_status" class="form-control">
+									<option value='' selected="selected">全部</option>
+									<option value='0'>正常</option>
+									<option value='1'>禁用</option>
+								</select>
+
+							</div>
+						</div>
+					</div>
+
+					<div class="col-sm-2 col-lg-1">
+						<div class="form-group">
+							<div class="input-group">
+								<button type="button" id="search_btn" class="btn btn-success">
+									<span class="glyphicon glyphicon-search"></span> 搜索
+								</button>
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+
+				<div class="form_area" style="padding: 10px; margin: 5px;">
+					<p class="bg-warning" id="msg"
+						style="height: 40px; line-height: 40px; color: red; text-align: center; display: none;"></p>
+					<div class="row">
+						<div class="col-sm-3">
+							<div class="form-group">
+								<div class="input-group">
+									<label class="input-group-addon"><font color="red">*</font>用户帐号：</label>
+									<input name="user_id" id="user_id" type="text" maxlength="16"
+										class="form-control check_input" title="用户帐号"
+										placeholder="用户帐号">
+
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-3">
+							<div class="form-group">
+								<div class="input-group">
+									<label class="input-group-addon"><font color="red">*</font>用户名称：</label>
+									<input name="user_name" id="user_name" type="text"
+										maxlength="32" class="form-control check_input" title="用户名称"
+										placeholder="用户名称">
+								</div>
+							</div>
+						</div>
+
+						<div class="col-sm-3">
+							<div class="form-group">
+								<div class="input-group">
+									<label class="input-group-addon"><font color="red">*</font>用户密码：</label>
+									<input type="text" class="form-control check_input"
+										maxlength="16" title="用户密码" name="password" id="password"
+										placeholder="用户密码">
+
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-3">
+							<button type="button" class="btn btn-success " id="add_btn">
+								<span class="glyphicon glyphicon-plus">添加用户</span>
+							</button>
+							<button type="button" class="btn btn-primary " id="save_btn"
+								style="display: none;">保存修改</button>
+							<input name="user_code" type="hidden" id="user_code">
+							<button type="button" class="btn btn-success " id="clear_btn"
+								style="display: none; margin-left: 10px;">返回</button>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-sm-3">
+							<div class="form-group">
+								<div class="input-group">
+									<label class="input-group-addon"><font color="red">*</font>手机号码：</label>
+									<input type="text" class="form-control check_input"
+										title="手机号码" name="phone" id="phone" placeholder="手机号码">
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-3">
+							<div class="form-group">
+								<div class="input-group">
+									<label class="input-group-addon"><font color="red"
+										style="visibility: hidden;">*</font>用户职称：</label> <input type="text"
+										class="form-control check_input" title="用户职称" maxlength="80"
+										name="user_title" id="user_title" placeholder="用户职称">
+
+								</div>
+							</div>
+						</div>
+
+						<div class="col-sm-3">
+							<div class="form-group">
+								<div class="input-group">
+									<label class="input-group-addon"><font color="red"
+										style="visibility: hidden;">*</font>用户状态：</label><select name="status"
+										id="status" class="form-control">
+										<option value='0' selected="selected">正常</option>
+										<option value='1'>禁用</option>
+									</select>
+
+								</div>
+							</div>
+						</div>
+
+
+					</div>
+
+					<div class="row">
+						<div class="col-sm-3">
+							<div class="form-group">
+								<div class="input-group">
+									<label class="input-group-addon"><font color="red">*</font>用户角色：</label><select
+										name="role_id" id="role_id" class="form-control">
+									</select>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-sm-3">
+							<div class="form-group">
+								<div class="input-group">
+									<label class="input-group-addon"><font color="red"
+										style="visibility: hidden;">*</font>用户部门：</label><select
+										name="dept_id" id="dept_id" class="form-control">
+										<option value=''>选择用户部门</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-3">
+							<button class="btn btn-success" type="button" id="addDept">
+								<span class="glyphicon glyphicon-plus">新增</span>
+							</button>
+							<button class="btn btn-danger" id="delDept" type="button"
+								onclick="return false;">
+								<span class="glyphicon glyphicon-remove">删除</span>
+							</button>
+						</div>
+					</div>
+				</div>
+				<div class="form_body" style="padding: 0px;">
+					<div class="row">
+						<div class="table-responsive">
+							<!--  .table-responsive  响应式表格 表格太宽时底部出现滚动条-->
+							<table id="example"
+								class="table table-striped table-hover table-bordered">
+								<!--.table 基本样式   .table-bordered 为表格和其中的每个单元格增加边框   .table-striped 增加斑马条纹样式 .table-hover 鼠标经过效果--->
+								<thead>
+									<tr>
+										<th>用户帐号</th>
+										<th>用户名称</th>
+										<th>所属部门</th>
+										<th>联系方式</th>
+										<th>用户职称</th>
+										<th>用户状态</th>
+										<th>最后修改时间</th>
+										<th>操作</th>
+									</tr>
+								</thead>
+
+							</table>
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+
+	<!--内容页结束-->
+	<div id="btn_div" style="display: none;">
+		<button type="button" onclick="editUser('#user_id#')"
+			class="btn btn-primary">编辑</button>
+		<button type="button" onclick="delUser('#user_id#')"
+			class="btn btn-danger">删除</button>
+	</div>
+
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">添加部门</h4>
+				</div>
+				<div class="modal-body">
+					<p class="bg-warning" id="dept_msg"
+						style="height: 40px; line-height: 40px; color: red; text-align: center; display: none;"></p>
+					<div class="row">
+						<div class="col-sm-10">
+							<div class="form-group">
+								<div class="input-group">
+									<label class="input-group-addon"><font color="red">*</font>部门编号：</label>
+									<input type="text" class="form-control check_input"
+										title="部门编号" name="dept_code" id="dept_code" maxlength="32"
+										placeholder="部门编号">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-10">
+							<div class="form-group">
+								<div class="input-group">
+									<label class="input-group-addon"><font color="red">*</font>部门名称：</label>
+									<input type="text" class="form-control check_input"
+										title="部门名称" name="dept_name" id="dept_name" maxlength="32"
+										placeholder="部门名称">
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-sm-10">
+							<div class="form-group">
+								<div class="input-group">
+									<label class="input-group-addon"><font color="red"
+										style="visibility: hidden;">*</font>部门描述：</label> <input type="text"
+										class="form-control check_input" title="部门描述" name="comments"
+										id="comments" maxlength="100" placeholder="部门描述">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" onclick="addDept();" class="btn btn-primary">确定</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+</body>
+</html>
+

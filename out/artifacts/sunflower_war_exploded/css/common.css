@@ -1,0 +1,32 @@
+/* 分页 */
+.newPageNumber li{
+    list-style: none;
+    display: inline-block;
+    background-color: #FFF;
+    
+}
+.newPageNumber li span{
+    border: 1px solid #DDD;
+    border-radius: 4px;
+    color:inherit;
+    padding: 4px 10px;
+    position: relative;
+    text-decoration: none;
+    float: left;
+}
+.newPageNumber li span:hover{
+    cursor: pointer;
+    background-color: #eee;
+    border-color: #ddd;
+}
+.newPageNumber li .pageNum {
+    border:none;
+    display: inline-block;
+    width: 120px;
+    padding: 2px 10px;
+}
+.newPageNumber .pageNumber{
+    width: 30px;
+    margin: 0 5px;
+}
+ 

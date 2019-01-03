@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="renderer" content="webkit">
+<script src="../../js/jquery.js"></script>
+<script src="../../js/bootstrap/js/bootstrap.js"></script>
+<link href="../../js/bootstrap/css/bootstrap.css" rel="stylesheet">
+<link href="../../js/bootstrap/css/font-awesome.css" rel="stylesheet">
+<link rel="stylesheet" href="../../css/MyCss.css" />
+<script src="../../js/DataTables/js/jquery.dataTables.min.hxqc.js"></script>
+<link href="../../js/DataTables/css/dataTables.bootstrap.css"
+	rel="stylesheet">
+<script src="../../js/DataTables/js/dataTables.bootstrap.js"></script>
+<!--自定义样式 及 公共js--->
+<link href="../../css/public.css" rel="stylesheet">
+<script src="../../js/public.js"></script>
+
+
+</head>
+
+<body>
+	<!--内容页开始 -->
+	<div class="container-fluid">
+
+		<!--表单框架-->
+		<form class="form-horizontal" id="test">
+			<div class="form_area">
+				<div class="form_head">
+						<div class="row">
+							<div class="col-sm-9"><span class="title">操作日志列表</span></div>
+							<div class="col-sm-3"></div>
+						</div>
+				</div>
+				<!--表格体-->
+				<div class="form_body padding_top" >
+
+					<div class="row" style="margin:10px 0px 0px 0px;">
+						<div class="col-sm-3">
+							<div class="form-group">
+								<div class="input-group">
+									<label class="input-group-addon">搜索条件：</label>
+									<select	style="height: 32px;" name="condition.search_key" id="search_key" class="form-control">
+										<option value="user_id">管理员帐号</option>
+										<option value="session_id">会话ID</option>
+										<option value="logvalue">操作</option>
+										<option value="signature">方法签名</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-3">
+							<div class="form-group">
+								<div class="input-group">
+									<label class="input-group-addon">搜索关键字：</label>
+									<input type="text" class="form-control check_input" id="search_value" name="condition.search_value" placeholder="帐号/名称/操作/方法签名" title="帐号/名称/操作/方法签名" value="">
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<div class="form-group">
+								<div class="input-group">
+									<button type="button" class="btn btn-success pull-right" id="search_btn"><span class="glyphicon glyphicon-search"></span> 搜索</button>
+								</div>
+							</div>
+						</div>
+
+					</div>
+
+					<div class="row">
+						<div class="table-responsive">
+							<!--  .table-responsive  响应式表格 表格太宽时底部出现滚动条-->
+							<table id="example"
+								class="table table-striped table-hover table-bordered">
+								<!--.table 基本样式   .table-bordered 为表格和其中的每个单元格增加边框   .table-striped 增加斑马条纹样式 .table-hover 鼠标经过效果--->
+								<thead>
+									<tr>
+										<th>用户帐号</th>
+										<th>会话ID</th>
+										<th>操作</th>
+										<th>方法签名</th>
+										<th>操作时间</th>
+
+									</tr>
+								</thead>
+
+							</table>
+						</div>
+					</div>
+
+
+
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<!--内容页结束-->
+	<script>
+		$(document).ready(function() {
+
+			var table = $("#example").dataTable({
+				"bProcessing" : true,// 加载数据时候是否显示进度条
+				"iDisplayLength" : 10,
+				"ordering" : false,// thead上的排序按钮
+				"searching" : false,// 搜索输入框显示
+				"bLengthChange" : false,// 分页条数选择按钮
+				"bServerSide" : true,// 是否从服务加载数据
+				"sAjaxSource" : GLOBAL.ctx + "/log/optionList",// 如果从服务器端加载数据,这个属性用于指
+				"sServerMethod" : "post",
+				// 定加载的路径
+				"sPaginationType" : "input",
+				"defData" : {
+					"search_key" : "search_key",
+					"search_value" : "search_value"
+				},// 参数为自定义,修改了datatable原代码，添加了请求参数
+				columns : [ {
+					data : "user_id"
+
+				}, {
+					data : "session_id",
+					render : function(data, type, row) {
+						return "<a href='javascript:GLOBAL.OpenUrl(GLOBAL.ctx+\"/page/log/loging.html?session_id="+data+"\",\"登录日志\");' />"+data+"</a>";
+					}
+
+				}, {
+					data : "logvalue"
+				}, {
+					data : "signature"
+				},
+
+				{
+					data : "create_time",
+					render : function(data, type, row) {
+						return data.ToLocalTime();
+					}
+				} ],
+				"oLanguage" : { // 主要用于设置各种提示文本
+					"sProcessing" : "正在处理...", // 设置进度条显示文本
+					"sLengthMenu" : "每页_MENU_行",// 显示每页多少条记录
+					"sEmptyTable" : "没有找到记录",// 没有记录时显示的文本
+					"sZeroRecords" : "没有找到记录",// 没有记录时显示的文本
+					"sInfo" : "当前第_START_至_END_条  共计_TOTAL_条",
+					"sInfoEmpty" : "",// 没记录时,关于记录数的显示文本
+					"sSearch" : "搜索:",// 搜索框前的文本设置
+					"oPaginate" : {
+						"sFirst" : "首页",
+						"sLast" : "未页",
+						"sNext" : "下页",
+						"sPrevious" : "上页"
+					}
+
+				}
+			});
+
+			$("#search_btn").click(function() {
+				table.fnFilter();
+			});
+
+			$("#search_value").keypress(function(e) {
+				// 回车键事件  
+				if (e.which == 13) {
+					table.fnFilter();
+					return false;
+				}
+
+			});
+
+		});
+	</script>
+
+</body>
+</html>
+
